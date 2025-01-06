@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("MYSQL_DATABASE_URL")
+}
+
+model Group {
+  id               BigInt    @id @default(autoincrement())
+  name             String?   @db.VarChar(256)
+  status           String?   @db.VarChar(256)
+  authorId         Int       @map("author_id")
+  participantId    Int       @map("participant_id")
+  latestMessageId  String?   @unique @map("latest_message_id") @db.VarChar(256)
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @default(now()) @updatedAt @map("updated_at")
+  messages         Message[]
+
+  @@index([authorId, status], name: "idx_author_status")
+  @@map("groups")
+}
+
+model Message {
+  id          BigInt     @id @default(autoincrement())
+  messageId   String     @unique @map("message_id") @db.VarChar(255)
+  groupId     BigInt     @map("group_id")
+  senderId    Int        @map("sender_id")
+  content     String     @db.Text
+  messageType String?    @default("text") @map("message_type") @db.VarChar(50)
+  mediaUrl    String?    @map("media_url") @db.VarChar(255)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @default(now()) @updatedAt @map("updated_at")
+  group       Group      @relation(fields: [groupId], references: [id])
+  deliveries  MessageDelivery[]
+
+  @@index([messageId], name: "idx_message_id")
+  @@map("messages")
+}
+
+model MessageDelivery {
+  id          BigInt    @id @default(autoincrement())
+  messageId   String    @unique @map("message_id") @db.VarChar(255)
+  deliveredAt DateTime? @map("delivered_at")
+  seenAt      DateTime? @map("seen_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
+  message     Message   @relation(fields: [messageId], references: [messageId])
+
+  @@index([messageId], name: "idx_message_id_delivery")
+  @@map("messages_deliveries")
+}

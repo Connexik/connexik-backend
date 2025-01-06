@@ -1,0 +1,60 @@
+{
+  "name": "jobolo-service",
+  "version": "0.0.1",
+  "description": "Backend service for Jobolo",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "build": "tsc && tsc-alias",
+    "prod": "node dist/index.js",
+    "lint": "eslint . --ext .ts",
+    "format": "eslint . --ext .ts --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.0.1",
+    "axios": "^1.7.9",
+    "body-parser": "^1.20.3",
+    "compression": "^1.7.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-async-errors": "^3.1.1",
+    "express-async-handler": "^1.2.0",
+    "express-validator": "^7.2.0",
+    "ioredis": "^5.4.1",
+    "ioredis-mock": "^8.9.0",
+    "lodash": "^4.17.21",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin-js": "^2.12.1",
+    "@types/compression": "^1.7.5",
+    "@types/lodash": "^4.17.13",
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "eslint": "^9.17.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-n": "^17.15.0",
+    "eslint-plugin-promise": "^7.2.1",
+    "prettier": "^3.4.2",
+    "prisma": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.2",
+    "tsc-alias": "^1.8.10"
+  },
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@prisma/client": [
+        "./node_modules/.prisma/client"
+      ]
+    }
+  }
+}
