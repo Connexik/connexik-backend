@@ -6,7 +6,7 @@ const prisma = new PrismaClient({
   log: ['query', 'info', 'warn', 'error'], // Log levels
   datasources: {
     db: {
-      url: `mysql://${Config.db.username}:${Config.db.password}@${Config.db.host}:${Config.db.port}/${Config.db.database}`
+      url: Config.mysql_db_url
     }
   }
 });

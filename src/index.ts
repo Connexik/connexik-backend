@@ -22,7 +22,7 @@ app.get('/health-check', (_req: Request, res: Response) => {
 });
 
 // Routes
-app.use('/chat', router);
+app.use('/convexik', router);
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {

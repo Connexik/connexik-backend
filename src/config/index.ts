@@ -26,7 +26,7 @@ const final = {
     port: parseInt(process.env.DB_PORT ?? '3306', 10),
     username: process.env.DB_USER ?? 'root',
     password: process.env.DB_PASS ?? '',
-    database: process.env.DB_NAME ?? 'dev_jobolo_db'
+    database: process.env.DB_NAME ?? 'convexik-db'
   },
   redis: {
     host: process.env.REDIS_HOST ?? 'localhost',
@@ -35,9 +35,12 @@ const final = {
     password: process.env.REDIS_PASS ?? '',
     database: parseInt(process.env.REDIS_DB_NAME ?? '0', 10)
   },
+  mysql_db_url: "",
   environment: process.env.ENVIRONMENT,
 }
 
-process.env.MYSQL_DATABASE_URL = `mysql://${final.db.username}:${final.db.password}@${final.db.host}:${final.db.port}/${final.db.database}`;
+final.mysql_db_url = `mysql://${final.db.username}:${final.db.password}@${final.db.host}:${final.db.port}/${final.db.database}`;
+
+process.env.MYSQL_DATABASE_URL = final.mysql_db_url;
 
 export default final;

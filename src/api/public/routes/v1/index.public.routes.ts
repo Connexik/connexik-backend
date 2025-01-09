@@ -1,15 +1,10 @@
 import express from 'express';
-import indexGroups from '../v1/index.routes.group';
-import indexMessages from '../v1/index.routes.messages';
-import configController from '../../controllers/config.controller';
+
+import userController from '../../controllers/user.controller';
+import { userConfigValidations } from '../validations/index.validations.routes';
 
 const router = express.Router();
 
-// https::host/chat/v1/
-
-router.use('/group', indexGroups);
-router.use('/messages', indexMessages);
-
-router.get('/config', configController.config);
+router.post('/user/config', userConfigValidations, userController.config);
 
 export default router;
