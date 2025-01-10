@@ -9,7 +9,7 @@ const success = (res: Response, payload: object, status: number = CODE.SUCCESS, 
   });
 };
 
-const error = (res: Response, payload: Error | object, status: number = CODE.BAD_REQUEST, message: string = 'Error'): Response => {
+const error = (res: Response, payload: Error | object, message: string = 'Error', status: number = CODE.BAD_REQUEST): Response => {
   return res.status(status).json({
     status,
     message,

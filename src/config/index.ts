@@ -23,8 +23,8 @@ if (result.error) {
 const final = {
   db: {
     host: process.env.DB_HOST ?? 'localhost',
-    port: parseInt(process.env.DB_PORT ?? '3306', 10),
-    username: process.env.DB_USER ?? 'root',
+    port: parseInt(process.env.DB_PORT ?? '5432', 10), // PostgreSQL default port
+    username: process.env.DB_USER ?? 'postgres',        // PostgreSQL default user
     password: process.env.DB_PASS ?? '',
     database: process.env.DB_NAME ?? 'convexik-db'
   },
@@ -35,12 +35,11 @@ const final = {
     password: process.env.REDIS_PASS ?? '',
     database: parseInt(process.env.REDIS_DB_NAME ?? '0', 10)
   },
-  mysql_db_url: "",
+  postgres_db_url: "",
   environment: process.env.ENVIRONMENT,
+  gemini_api_key: process.env.GEMINI_API_KEY
 }
 
-final.mysql_db_url = `mysql://${final.db.username}:${final.db.password}@${final.db.host}:${final.db.port}/${final.db.database}`;
-
-process.env.MYSQL_DATABASE_URL = final.mysql_db_url;
+final.postgres_db_url = `postgresql://${final.db.username}:${final.db.password}@${final.db.host}:${final.db.port}/${final.db.database}`;
 
 export default final;
