@@ -6,6 +6,7 @@ export const CODE = {
 };
 
 export const ENVIRONMENT = {
+  LOCAL: 'local',
   DEVELOPMENT: 'development',
   STAGING: 'staging',
   PRODUCTION: 'production'

@@ -1,5 +1,5 @@
-import { LinkedInUserDataDetail } from "@/resources/user.resource";
-import prisma from "../connection/data-source";
+import { type GetLinkedInUserData, GetLinkedInUserDataSchema, type LinkedInUserDataDetail } from '@/resources/user.resource';
+import prisma from '../connection/data-source';
 
 export const upsertLinkedInUserData = async (
   linkedInUserId: number,
@@ -8,6 +8,24 @@ export const upsertLinkedInUserData = async (
   await prisma.linkedInUserData.upsert({
     where: { linkedInUserId },
     update: { ...userData },
-    create: { linkedInUserId, ...userData },
+    create: { linkedInUserId, ...userData }
   });
+};
+
+export const getLinkedInUserData = async (linkedInUserId: number): Promise<GetLinkedInUserData | null> => {
+  const userData = await prisma.linkedInUserData.findUnique({
+    where: {
+      linkedInUserId
+    },
+    omit: {
+      createdAt: true,
+      updatedAt: true
+    }
+  });
+
+  if (!userData) {
+    return;
+  }
+
+  return GetLinkedInUserDataSchema.parse(userData);
 };

@@ -8,17 +8,19 @@ datasource db {
 }
 
 model LinkedInUser {
-  id            Int                @id @default(autoincrement())
-  uuid          String             @unique @db.VarChar(128)
-  firstName     String             @map("first_name") @db.VarChar(256)
-  lastName      String             @map("last_name") @db.VarChar(256)
-  identifier    Int             @unique @db.Integer
-  username      String             @unique @db.VarChar(128)
-  title         String?            @db.VarChar(512)
-  lastScannedAt DateTime?          @default(now()) @map("last_scanned_at")
-  createdAt     DateTime           @default(now()) @map("created_at")
-  updatedAt     DateTime           @default(now()) @updatedAt @map("updated_at")
-  userData      LinkedInUserData[]
+  id             Int                      @id @default(autoincrement())
+  uuid           String                   @unique @db.VarChar(128)
+  firstName      String                   @map("first_name") @db.VarChar(256)
+  lastName       String                   @map("last_name") @db.VarChar(256)
+  identifier     Int                      @unique @db.Integer
+  username       String                   @unique @db.VarChar(128)
+  title          String?                  @db.VarChar(512)
+  lastScannedAt  DateTime?                @map("last_scanned_at")
+  createdAt      DateTime                 @default(now()) @map("created_at")
+  updatedAt      DateTime                 @default(now()) @updatedAt @map("updated_at")
+  userData       LinkedInUserData?
+  filterRequests LinkedInFiltersRequest[]
+  actionsSummary LinkedInActionsSummary[]
 
   @@index([identifier], name: "idx_linkedin_user_identifier")
   @@index([username], name: "idx_linkedin_user_username")
@@ -39,4 +41,49 @@ model LinkedInUserData {
   user            LinkedInUser @relation(fields: [linkedInUserId], references: [id])
 
   @@map("linkedin_users_data")
+}
+
+model LinkedInFiltersRequest {
+  id                         Int                          @id @default(autoincrement())
+  linkedInUserId             Int                          @map("linkedin_user_id")
+  action                     String
+  type                       String
+  filters                    Json
+  createdAt                  DateTime                     @default(now()) @map("created_at")
+  updatedAt                  DateTime                     @default(now()) @updatedAt @map("updated_at")
+  user                       LinkedInUser                 @relation(fields: [linkedInUserId], references: [id])
+  linkedInFiltersRequestData LinkedInFiltersRequestData[]
+
+  @@map("linkedin_filters_request")
+}
+
+model LinkedInFiltersRequestData {
+  id                       Int                    @id @default(autoincrement())
+  linkedInFiltersRequestId Int                    @map("linkedin_filters_request_id")
+  username                 String
+  fullName                 String                 @map("full_name")
+  title                    String?
+  memberInsights           String?                @map("member_insights")
+  aiDecision               String                 @map("ai_decision")
+  aiReason                 String                 @map("ai_reason")
+  aiConfidence             Int                    @map("ai_confidence")
+  createdAt                DateTime               @default(now()) @map("created_at")
+  updatedAt                DateTime               @default(now()) @updatedAt @map("updated_at")
+  linkedInFiltersRequest   LinkedInFiltersRequest @relation(fields: [linkedInFiltersRequestId], references: [id])
+
+  @@map("linkedin_filters_request_data")
+}
+
+model LinkedInActionsSummary {
+  id             Int          @id @default(autoincrement())
+  linkedInUserId Int          @map("linkedin_user_id")
+  action         String
+  actionDate     DateTime     @map("action_date") @db.Date
+  actionCount    Int          @map("action_count")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at")
+  user           LinkedInUser @relation(fields: [linkedInUserId], references: [id])
+
+  @@index([linkedInUserId, action, actionDate], name: "idx_linkedin_action_summary")
+  @@map("linkedin_actions_summary")
 }

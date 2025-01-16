@@ -1,6 +1,6 @@
 // src/utils/middleware.utils.ts
 
-import { RequestHandler } from 'express';
+import { type RequestHandler } from 'express';
 import { validationResult } from 'express-validator';
 
 const validate: RequestHandler = (req, res, next) => {

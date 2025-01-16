@@ -1,40 +1,36 @@
-import { body } from "express-validator";
-import middleware from "../../../../utils/middleware.utils";
+import { body } from 'express-validator';
+import middleware from '../../../../utils/middleware.utils';
 
 export const userConfigValidations = [
-  body("identifier")
+  body('identifier')
     .isNumeric()
-    .withMessage("identifier is required")
+    .withMessage('identifier is required')
     .notEmpty(),
-  body("username")
-    .isString()
-    .withMessage("username is required")
-    .notEmpty(),
-  body("title")
-    .isString()
-    .withMessage("title is required")
-    .notEmpty(),
-  body("firstName")
-    .isString()
-    .withMessage("firstName is required")
-    .notEmpty(),
-  body("lastName")
-    .isString()
-    .withMessage("lastName is required")
-    .notEmpty(),
+  body('username').isString().withMessage('username is required').notEmpty(),
+  body('title').isString().withMessage('title is required').notEmpty(),
+  body('firstName').isString().withMessage('firstName is required').notEmpty(),
+  body('lastName').isString().withMessage('lastName is required').notEmpty(),
 
-  middleware.validate,
+  middleware.validate
 ];
 
 export const userScannerValidations = [
-  body("convexikId")
-    .isNumeric()
-    .withMessage("identifier is required")
-    .notEmpty(),
-  body("text")
+  body('convexikId')
     .isString()
-    .withMessage("text is required")
+    .withMessage('convexikId is required')
     .notEmpty(),
+  body('text').isString().withMessage('text is required').notEmpty(),
 
-  middleware.validate,
+  middleware.validate
+];
+
+export const connectionsAcceptValidations = [
+  body('pendingInvitations')
+    .isArray()
+    .withMessage('pendingInvitations is required')
+    .notEmpty(),
+  body('filters').isArray().withMessage('filters is required').notEmpty(),
+  body('convexikId').isUUID().withMessage('convexikId is required').notEmpty(),
+
+  middleware.validate
 ];

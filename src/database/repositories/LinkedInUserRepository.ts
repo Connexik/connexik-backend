@@ -1,24 +1,24 @@
 import moment from 'moment';
-import { randomUUID, UUID } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 
-import { BasicLinkedInUser, GetLinkedInUser } from '@/resources/user.resource';
+import { type BasicLinkedInUser, type GetLinkedInUser } from '@/resources/user.resource';
 import prisma from '../connection/data-source';
 
 export const getOrCreateLinkedInUserInfo = async (
-  identifier: number, 
-  username: string, 
-  title: string, 
-  firstName: string, 
+  identifier: number,
+  username: string,
+  title: string,
+  firstName: string,
   lastName: string
 ): Promise<GetLinkedInUser> => {
   let linkedInUser = await prisma.linkedInUser.findUnique({
     where: {
-      identifier,
+      identifier
     },
     select: {
       identifier: true,
       uuid: true,
-      lastScannedAt: true,
+      lastScannedAt: true
     }
   })
 
@@ -44,21 +44,21 @@ export const getOrCreateLinkedInUserInfo = async (
     connexikId: linkedInUser.uuid,
     isLoggedIn: false,
     isScanned: !!linkedInUser.lastScannedAt,
-    rescanTs: linkedInUser.lastScannedAt ? moment(linkedInUser.lastScannedAt).add(30, 'days').toISOString() : moment().toISOString(),
+    rescanTs: linkedInUser.lastScannedAt ? moment(linkedInUser.lastScannedAt).add(1, 'days').toISOString() : moment().toISOString()
   };
 };
 
 export const getLinkedInUserInfo = async (uuid: string): Promise<BasicLinkedInUser | null> => {
   return await prisma.linkedInUser.findUnique({
     where: {
-      uuid,
+      uuid
     },
     select: {
       id: true,
       username: true,
       identifier: true,
       uuid: true,
-      lastScannedAt: true,
+      lastScannedAt: true
     }
   });
 }

@@ -2,6 +2,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import * as dotenv from 'dotenv';
 import logUtils from '@utils/log.utils';
+import { ENVIRONMENT } from './constants/common.constants';
 
 const Log = logUtils.processor('config/index.ts');
 
@@ -24,7 +25,7 @@ const final = {
   db: {
     host: process.env.DB_HOST ?? 'localhost',
     port: parseInt(process.env.DB_PORT ?? '5432', 10), // PostgreSQL default port
-    username: process.env.DB_USER ?? 'postgres',        // PostgreSQL default user
+    username: process.env.DB_USER ?? 'postgres', // PostgreSQL default user
     password: process.env.DB_PASS ?? '',
     database: process.env.DB_NAME ?? 'convexik-db'
   },
@@ -35,8 +36,8 @@ const final = {
     password: process.env.REDIS_PASS ?? '',
     database: parseInt(process.env.REDIS_DB_NAME ?? '0', 10)
   },
-  postgres_db_url: "",
-  environment: process.env.ENVIRONMENT,
+  postgres_db_url: '',
+  environment: process.env.ENVIRONMENT || ENVIRONMENT.LOCAL,
   gemini_api_key: process.env.GEMINI_API_KEY
 }
 

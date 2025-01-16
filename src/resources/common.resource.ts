@@ -1,4 +1,4 @@
 export interface AIUsage {
-    input: number,
-    output: number
+  input: number
+  output: number
 }
