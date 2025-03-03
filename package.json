@@ -11,8 +11,7 @@
     "format": "eslint . --ext .ts --fix",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
-    "prisma:generate": "prisma generate",
-    "postinstall": "prisma generate"
+    "prisma:generate": "prisma generate"
   },
   "keywords": [],
   "author": "",
