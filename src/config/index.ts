@@ -8,17 +8,14 @@ const Log = logUtils.processor('config/index.ts');
 
 // Check if .env file exists
 const envPath = path.join(__dirname, '/../../dynamic/.env');
-if (!fs.existsSync(envPath)) {
-  Log.error(new Error('Env File not found!'));
-  process.exit();
-}
+if (fs.existsSync(envPath)) {
+  // Load environment variables
+  const result = dotenv.config({ path: envPath });
 
-// Load environment variables
-const result = dotenv.config({ path: envPath });
-
-if (result.error) {
-  Log.error(new Error('Error loading .env file'));
-  process.exit();
+  if (result.error) {
+    Log.error(new Error('Error loading .env file'));
+    process.exit();
+  }
 }
 
 const final = {
