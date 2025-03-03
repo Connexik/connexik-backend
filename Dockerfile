@@ -16,7 +16,7 @@ COPY package*.json tsconfig.json ./
 COPY prisma ./prisma/
 
 # Install all dependencies including devDependencies
-RUN npm ci
+RUN npm i
 
 # Copy source code after installing dependencies to leverage caching
 COPY . .
@@ -41,7 +41,7 @@ WORKDIR /app
 
 # Copy package files and install only production dependencies
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm i --omit=dev
 
 # Copy build artifacts and required files from builder stage
 COPY --from=builder /app/dist ./dist
