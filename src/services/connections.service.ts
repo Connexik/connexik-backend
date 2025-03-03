@@ -14,7 +14,7 @@ import {
   type LLMRelevantUsers,
   type CreateLinkedInFiltersRequestData,
   type LinkedinActionSummaryBasic,
-  type PendingInvitations
+  type Invitations
 } from '@/resources/connection.resource';
 import {
   type GetLinkedInUserData,
@@ -33,7 +33,7 @@ const getActionSummary = async (
 
 const processAcceptFilters = async (
   linkedInUserData: GetLinkedInUserData,
-  pendingInvites: PendingInvitations[],
+  pendingInvites: Invitations[],
   filters: string[],
   actionSummary: LinkedinActionSummaryBasic
 ): Promise<LLMRelevantUsers[]> => {
@@ -97,14 +97,12 @@ const processAcceptFilters = async (
 
   console.log('Usage Metadata = ', usageMetadata);
 
-  const pendingInvitesObj: Record<string, PendingInvitations> =
-    pendingInvites.reduce<Record<string, PendingInvitations>>(
-      (data, invite) => {
-        data[invite.username] = invite;
-        return data;
-      },
-      {}
-    );
+  const pendingInvitesObj: Record<string, Invitations> = pendingInvites.reduce<
+  Record<string, Invitations>
+  >((data, invite) => {
+    data[invite.username] = invite;
+    return data;
+  }, {});
 
   const insertBatch: CreateLinkedInFiltersRequestData[] = relevantUsers.map(
     (user) => ({
@@ -137,7 +135,81 @@ const processAcceptFilters = async (
   return relevantUsers;
 };
 
+const processGrowFilters = async (
+  linkedInUserData: GetLinkedInUserData,
+  connections: Invitations[],
+  filter: string,
+  actionSummary: LinkedinActionSummaryBasic
+): Promise<LLMRelevantUsers[]> => {
+  const requestId = await createLinkedInFiltersRequest(
+    linkedInUserData.linkedInUserId,
+    CONNECTIONS_ACTION.grow,
+    CONNECTIONS_ACTION_TYPE.basic_details,
+    [filter]
+  );
+
+  if (!requestId) {
+    throw Error('Some error occurred! We are looking into it.');
+  }
+
+  const userDataPrompt = JSON.stringify(linkedInUserData);
+  const connectionsPrompt = JSON.stringify(
+    connections.map((invite) => ({
+      username: invite.username,
+      title: invite.title,
+      memberInsights: invite.memberInsights
+    }))
+  );
+
+  const { usageMetadata, data: relevantUsers } =
+    await geminiUtils.generateReleventUsers(
+      filter,
+      userDataPrompt,
+      connectionsPrompt
+    );
+
+  console.log('Usage Metadata = ', usageMetadata);
+
+  const pendingInvitesObj: Record<string, Invitations> = connections.reduce<
+  Record<string, Invitations>
+  >((data, invite) => {
+    data[invite.username] = invite;
+    return data;
+  }, {});
+
+  const insertBatch: CreateLinkedInFiltersRequestData[] = relevantUsers.map(
+    (user) => ({
+      linkedInFiltersRequestId: requestId,
+      username: user.username,
+      fullName: pendingInvitesObj[user.username].fullName,
+      title: pendingInvitesObj[user.username].title,
+      memberInsights: pendingInvitesObj[user.username].memberInsights,
+      aiDecision: user.status,
+      aiReason: user.reason,
+      aiConfidence: user.confidence
+    })
+  );
+
+  await createBatchLinkedInFiltersRequestData(insertBatch);
+
+  if (!actionSummary) {
+    await createLinkedInActionSummary(
+      linkedInUserData.linkedInUserId,
+      connections.length,
+      CONNECTIONS_ACTION.grow
+    );
+  } else {
+    await updateLinkedInActionSummary(
+      actionSummary.linkedInActionSummaryId,
+      connections.length
+    );
+  }
+
+  return relevantUsers;
+};
+
 export default {
   getActionSummary,
-  processAcceptFilters
+  processAcceptFilters,
+  processGrowFilters
 };

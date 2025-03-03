@@ -1,5 +1,6 @@
 export const CONNECTIONS_ACTION = {
-  accept: 'accept'
+  accept: 'accept',
+  grow: 'grow'
 }
 
 export const CONNECTIONS_ACTION_TYPE = {
@@ -7,7 +8,8 @@ export const CONNECTIONS_ACTION_TYPE = {
 }
 
 export const CONNECTIONS_MAX_THRESHOLD_PER_DAY = {
-  [CONNECTIONS_ACTION.accept]: 60
+  [CONNECTIONS_ACTION.accept]: 60,
+  [CONNECTIONS_ACTION.grow]: 60
 };
 
 export const CONNECTIONS_FILTERS = {

@@ -7,9 +7,26 @@ datasource db {
   url      = env("POSTGRES_DATABASE_URL")
 }
 
+model AuthUser {
+  id            String         @id @default(uuid()) @db.VarChar(128)
+  sub           String         @unique @db.VarChar(128)
+  email         String         @db.VarChar(256)
+  emailVerified Boolean        @default(false) @map("email_verified")
+  firstName     String         @map("first_name") @db.VarChar(256)
+  lastName      String         @map("last_name") @db.VarChar(256)
+  status        String         @default("active") @db.VarChar(64)
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @default(now()) @updatedAt @map("updated_at")
+  linkedInUser  LinkedInUser[]
+
+  @@index([sub], name: "idx_auth_user_sub")
+  @@map("auth_users")
+}
+
 model LinkedInUser {
   id             Int                      @id @default(autoincrement())
   uuid           String                   @unique @db.VarChar(128)
+  authUserId     String                   @map("auth_user_id")
   firstName      String                   @map("first_name") @db.VarChar(256)
   lastName       String                   @map("last_name") @db.VarChar(256)
   identifier     Int                      @unique @db.Integer
@@ -18,6 +35,7 @@ model LinkedInUser {
   lastScannedAt  DateTime?                @map("last_scanned_at")
   createdAt      DateTime                 @default(now()) @map("created_at")
   updatedAt      DateTime                 @default(now()) @updatedAt @map("updated_at")
+  authUser       AuthUser                 @relation(fields: [authUserId], references: [id])
   userData       LinkedInUserData?
   filterRequests LinkedInFiltersRequest[]
   actionsSummary LinkedInActionsSummary[]

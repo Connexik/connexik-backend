@@ -45,17 +45,17 @@ export const LinkedInUserDataDetailSchema = z.object({
       title: z.string(),
       text: z.string()
     })
-  ).optional(),
+  ).optional().nullable(),
   interests: z.array(
     z.object({
-      name: z.string().optional(),
-      title: z.string().optional(),
-      company: z.string().optional(),
-      group: z.string().optional(),
-      newsletter: z.string().optional(),
-      school: z.string().optional()
+      name: z.string().optional().nullable(),
+      title: z.string().optional().nullable(),
+      company: z.string().optional().nullable(),
+      group: z.string().optional().nullable(),
+      newsletter: z.string().optional().nullable(),
+      school: z.string().optional().nullable()
     })
-  ).optional()
+  ).optional().nullable()
 });
 
 export type LinkedInUserDataDetail = z.infer<typeof LinkedInUserDataDetailSchema>;

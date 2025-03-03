@@ -17,8 +17,10 @@ const config = async (req: Request, res: Response): Promise<void> => {
     firstName: string
     lastName: string
   };
+  const authUserId = req.authUserId;
 
   const userData: GetLinkedInUser = await userService.processConfig(
+    authUserId,
     identifier,
     username,
     title,
@@ -30,11 +32,11 @@ const config = async (req: Request, res: Response): Promise<void> => {
 };
 
 const scanner = async (req: Request, res: Response): Promise<void> => {
-  const { convexikId, text } = req.body as { convexikId: string, text: string };
+  const { connexikId, text } = req.body as { connexikId: string, text: string };
 
-  const userData: BasicLinkedInUser = await userService.getUserInfo(convexikId);
+  const userData: BasicLinkedInUser = await userService.getUserInfo(connexikId);
   if (!userData) {
-    throw Error('ConvexikId not registered!');
+    throw Error('connexikId not registered!');
   }
   if (
     userData.lastScannedAt &&

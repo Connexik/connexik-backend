@@ -27,7 +27,7 @@ const final = {
     port: parseInt(process.env.DB_PORT ?? '5432', 10), // PostgreSQL default port
     username: process.env.DB_USER ?? 'postgres', // PostgreSQL default user
     password: process.env.DB_PASS ?? '',
-    database: process.env.DB_NAME ?? 'convexik-db'
+    database: process.env.DB_NAME ?? 'connexik-db'
   },
   redis: {
     host: process.env.REDIS_HOST ?? 'localhost',
@@ -38,7 +38,10 @@ const final = {
   },
   postgres_db_url: '',
   environment: process.env.ENVIRONMENT || ENVIRONMENT.LOCAL,
-  gemini_api_key: process.env.GEMINI_API_KEY
+  gemini_api_key: process.env.GEMINI_API_KEY,
+  linkedin_client_secret: process.env.LINKEDIN_CLIENT_SECRET,
+  linkedin_client_id: process.env.LINKEDIN_CLIENT_ID,
+  jwt_secret: process.env.JWT_SECRET
 }
 
 final.postgres_db_url = `postgresql://${final.db.username}:${final.db.password}@${final.db.host}:${final.db.port}/${final.db.database}`;

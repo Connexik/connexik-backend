@@ -22,7 +22,7 @@ RUN npm ci
 COPY . .
 
 # Generate Prisma client for database access
-RUN npx prisma generate
+# RUN npx prisma generate
 
 # Build TypeScript code into JavaScript
 RUN npm run build

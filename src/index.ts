@@ -1,4 +1,3 @@
-import 'express-async-errors';
 import express, {
   type Request,
   type Response,
@@ -10,6 +9,7 @@ import cors from 'cors';
 
 import logUtils from '@utils/log.utils';
 import router from '@api/index.routes';
+import { asyncHandler } from './utils/async-handler.utils';
 
 const app = express();
 const PORT = process.env.PORT ?? '3000';
@@ -40,7 +40,7 @@ app.use(
 // Middlewares
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(compression());
+app.use(asyncHandler(compression()));
 app.use(logUtils.middleware);
 
 // Health Check

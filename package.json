@@ -1,7 +1,7 @@
 {
-  "name": "convexik-backend",
+  "name": "connexik-backend",
   "version": "1.0.0",
-  "description": "Backend service for Convexik extension",
+  "description": "Backend service for Connexik extension",
   "main": "index.js",
   "scripts": {
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
@@ -22,6 +22,7 @@
     "@prisma/client": "^6.2.1",
     "@sentry/node": "^8.48.0",
     "@sentry/profiling-node": "^8.48.0",
+    "@types/jsonwebtoken": "^9.0.7",
     "axios": "^0.21.0",
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",
@@ -34,6 +35,7 @@
     "firebase-admin": "^13.0.2",
     "ioredis": "^5.4.1",
     "ioredis-mock": "^8.9.0",
+    "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "multer": "^1.4.5-lts.1",

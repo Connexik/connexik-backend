@@ -3,8 +3,10 @@ import { randomUUID } from 'node:crypto';
 
 import { type BasicLinkedInUser, type GetLinkedInUser } from '@/resources/user.resource';
 import prisma from '../connection/data-source';
+import { type LinkedInUser } from '@prisma/client/default';
 
 export const getOrCreateLinkedInUserInfo = async (
+  authUserId: string,
   identifier: number,
   username: string,
   title: string,
@@ -25,6 +27,7 @@ export const getOrCreateLinkedInUserInfo = async (
   if (!linkedInUser) {
     linkedInUser = await prisma.linkedInUser.create({
       data: {
+        authUserId,
         identifier,
         username,
         firstName,
@@ -46,6 +49,16 @@ export const getOrCreateLinkedInUserInfo = async (
     isScanned: !!linkedInUser.lastScannedAt,
     rescanTs: linkedInUser.lastScannedAt ? moment(linkedInUser.lastScannedAt).add(1, 'days').toISOString() : moment().toISOString()
   };
+};
+
+export const updateLinkedInUser = async (
+  linkedInUserId: number,
+  userData: Partial<LinkedInUser>
+): Promise<void> => {
+  await prisma.linkedInUser.update({
+    where: { id: linkedInUserId },
+    data: { ...userData }
+  });
 };
 
 export const getLinkedInUserInfo = async (uuid: string): Promise<BasicLinkedInUser | null> => {

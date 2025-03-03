@@ -6,7 +6,7 @@ export interface LinkedinActionSummaryBasic {
   actionCount: number
 }
 
-export interface PendingInvitations {
+export interface Invitations {
   username: string
   fullName: string
   title: string
