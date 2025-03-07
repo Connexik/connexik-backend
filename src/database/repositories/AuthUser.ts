@@ -27,7 +27,7 @@ export const upsertAuthUser = async ({
   const { id } = await prisma.authUser.upsert({
     where: { sub },
     update: { email, emailVerified, firstName, lastName },
-    create: { sub, email, emailVerified, firstName, lastName, status: 'queued' },
+    create: { sub, email, emailVerified, firstName, lastName, status: 'active' },
     select: { id: true }
   });
 
@@ -35,5 +35,5 @@ export const upsertAuthUser = async ({
     return null;
   }
 
-  return { authUserId: id, firstName, lastName, status: 'queued' };
+  return { authUserId: id, firstName, lastName, status: 'active' };
 };
